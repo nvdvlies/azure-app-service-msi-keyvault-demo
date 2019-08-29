@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-	"aad_admin_principal_id": {
+    "aad_admin_principal_id": {
       "type": "string"
     },
     "appservice_name": {
@@ -33,7 +33,7 @@
         "P4"
       ]
     },
-	"keyvault_name": {
+    "keyvault_name": {
       "type": "string"
     }
   },
@@ -68,24 +68,16 @@
             "tenantId": "[variables('aad_tenant_id')]",
             "objectId": "[parameters('aad_admin_principal_id')]",
             "permissions": {
-              "keys": [
-                "all"
-              ],
-              "secrets": [
-                "all"
-              ],
-              "certificates": [
-                "all"
-              ]
+              "keys": ["all"],
+              "secrets": ["all"],
+              "certificates": ["all"]
             }
           },
           {
             "tenantId": "[reference(variables('appservice_recource_id'), '2016-08-01', 'Full').identity.tenantId]",
             "objectId": "[reference(variables('appservice_recource_id'), '2016-08-01', 'Full').identity.principalId]",
             "permissions": {
-              "secrets": [
-                "get"
-              ]
+              "secrets": ["get"]
             }
           }
         ]
