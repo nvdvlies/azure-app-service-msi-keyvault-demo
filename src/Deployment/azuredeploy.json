@@ -1,0 +1,151 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+	"aad_admin_principal_id": {
+      "type": "string"
+    },
+    "appservice_name": {
+      "type": "string"
+    },
+    "appinsights_name": {
+      "type": "string"
+    },
+    "appservice_plan_name": {
+      "type": "string"
+    },
+    "appservice_sku": {
+      "type": "string",
+      "defaultValue": "S1",
+      "allowedValues": [
+        "F1",
+        "D1",
+        "B1",
+        "B2",
+        "B3",
+        "S1",
+        "S2",
+        "S3",
+        "P1",
+        "P1v2",
+        "P2",
+        "P3",
+        "P4"
+      ]
+    },
+	"keyvault_name": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "appservice_recource_id": "[resourceId('Microsoft.Web/sites', parameters('appservice_name'))]",
+    "aad_tenant_id": "[subscription().tenantId]"
+  },
+  "resources": [
+    {
+      "type": "microsoft.insights/components",
+      "apiVersion": "2015-05-01",
+      "name": "[parameters('appinsights_name')]",
+      "location": "[resourceGroup().location]",
+      "kind": "web",
+      "properties": {
+        "Application_Type": "web"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2016-10-01",
+      "name": "[parameters('keyvault_name')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "standard"
+        },
+        "tenantId": "[subscription().tenantId]",
+        "accessPolicies": [
+          {
+            "tenantId": "[variables('aad_tenant_id')]",
+            "objectId": "[parameters('aad_admin_principal_id')]",
+            "permissions": {
+              "keys": [
+                "all"
+              ],
+              "secrets": [
+                "all"
+              ],
+              "certificates": [
+                "all"
+              ]
+            }
+          },
+          {
+            "tenantId": "[reference(variables('appservice_recource_id'), '2016-08-01', 'Full').identity.tenantId]",
+            "objectId": "[reference(variables('appservice_recource_id'), '2016-08-01', 'Full').identity.principalId]",
+            "permissions": {
+              "secrets": [
+                "get"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2016-09-01",
+      "name": "[parameters('appservice_plan_name')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('appservice_sku')]"
+      },
+      "kind": "app",
+      "properties": {
+        "name": "[parameters('appservice_plan_name')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2016-08-01",
+      "name": "[parameters('appservice_name')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('appservice_plan_name'))]"
+      ],
+      "kind": "app",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appservice_plan_name'))]"
+      },
+      "resources": [
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "2016-08-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('appservice_name'))]"
+          ],
+          "properties": {
+            "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', parameters('appinsights_name'))).InstrumentationKey]",
+            "KeyvaultName": "[parameters('keyvault_name')]"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2016-08-01",
+      "name": "[concat(parameters('appservice_name'), '/', parameters('appservice_name'), '.azurewebsites.net')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('appservice_name'))]"
+      ],
+      "properties": {
+        "siteName": "[parameters('appservice_name')]",
+        "hostNameType": "Verified"
+      }
+    }
+  ]
+}

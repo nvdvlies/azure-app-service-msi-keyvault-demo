@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{E865F939-8EA4-4017-B8DF-6C8A90AC4675}"
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "AzureResourceGroup", "Deployment\AzureResourceGroup.deployproj", "{422480CF-6559-4544-9DEE-103DB9AB58FC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E865F939-8EA4-4017-B8DF-6C8A90AC4675}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E865F939-8EA4-4017-B8DF-6C8A90AC4675}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E865F939-8EA4-4017-B8DF-6C8A90AC4675}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E865F939-8EA4-4017-B8DF-6C8A90AC4675}.Release|Any CPU.Build.0 = Release|Any CPU
+		{422480CF-6559-4544-9DEE-103DB9AB58FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{422480CF-6559-4544-9DEE-103DB9AB58FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{422480CF-6559-4544-9DEE-103DB9AB58FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{422480CF-6559-4544-9DEE-103DB9AB58FC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6B7693F1-5EDB-47A6-A594-F9ECE968B509}
+	EndGlobalSection
+EndGlobal

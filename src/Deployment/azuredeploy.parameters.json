@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "aad_admin_principal_id": {
+      "value": "48007025-1a38-4c85-a799-22b1fde3ed82"
+    },
+    "appinsights_name": {
+      "value": "demo20190829appinsights"
+    },
+    "appservice_name": {
+      "value": "demo20190829web"
+    },
+    "appservice_plan_name": {
+      "value": "demo20190829plan"
+    },
+    "appservice_sku": {
+      "value": "S1"
+    },
+    "keyvault_name": {
+      "value": "demo20190829keyvault"
+    }
+  }
+}
